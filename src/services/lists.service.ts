@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ListsDTO } from '../dto/lists.dto';
 import ListModel from '../models/lists.model';
 import { Repository } from 'typeorm';
+import { ListsDTO } from 'src/dto/lists.dto';
 
 @Injectable()
 export class ListService {

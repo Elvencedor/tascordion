@@ -1,0 +1,32 @@
+syntax = 'proto3';
+package lists;
+
+message createListRequest {
+  string title = 1;
+}
+
+message createListResponse {
+  map<string, string> data = 1;
+}
+
+message updateListRequest {
+  string title = 1;
+}
+
+message updateListResponse {
+  map<string, string> data = 1;
+}
+
+message deleteListRequest {
+  string listId = 1;
+}
+
+message deleteListResponse {
+  bool data = 1;
+}
+
+service ListProtoService {
+  rpc createList(createListRequest) returns (createListResponse);
+  rpc updateListById(updateListRequest) returns (updateListResponse);
+  rpc deleteListById(deleteListRequest) returns (deleteListResponse);
+}

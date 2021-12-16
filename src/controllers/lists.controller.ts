@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
 import { ListsDTO } from '../dto/lists.dto';
 import { ListService } from '../services/lists.service';
 
@@ -7,17 +7,17 @@ import { ListService } from '../services/lists.service';
 export class ListController {
   constructor(private readonly listService: ListService) {}
 
-  @MessagePattern({ role: 'list', cmd: 'create-list' })
+  @GrpcMethod('ListProtoService', 'createList')
   createList(payload: ListsDTO) {
     return this.listService.create(payload);
   }
 
-  @MessagePattern({ role: 'list', cmd: 'update-list' })
+  @GrpcMethod('ListProtoService', 'updateListById')
   updateListById({ payload, listId }: { payload: ListsDTO; listId: string }) {
     return this.listService.updateById(payload, listId);
   }
 
-  @MessagePattern({ role: 'list', cmd: 'delete-list' })
+  @GrpcMethod('ListProtoService', 'deleteListById')
   deleteListById(listId: string) {
     return this.listService.deleteById(listId);
   }

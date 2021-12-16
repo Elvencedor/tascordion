@@ -5,12 +5,20 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ListModule } from './modules/lists.module';
-import { ListItemModule } from './modules/listItems.module';
+import { PubSubModule } from './modules/pubSub.module';
+import { join } from 'path';
+// import { ListItemModule } from './modules/listItems.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    GraphQLModule.forRoot({ autoSchemaFile: 'schema.gql' }),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: () => ({
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      }),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,10 +31,11 @@ import { ListItemModule } from './modules/listItems.module';
         database: configService.get('DATABASE'),
         entities: ['dist/**/*.model.js'],
         synchronize: true,
+        logging: true,
       }),
     }),
+    PubSubModule,
     ListModule,
-    ListItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
